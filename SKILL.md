@@ -132,6 +132,7 @@ Rules:
 - Review your own diff before reporting: run /fix-code, fix the real findings, re-run the verify bullets. Code review is your job, not the spec session's.
 - Do not commit unless CLAUDE.md or the user says to.
 - When done, report to the user in your own session, never to the spec session, in four parts: what was built; every deviation and why ("None" must be stated); any Outcome bullet you could not verify and what blocked it; and a section headed exactly "Spec issues" with one bullet per defect you found in the spec, naming the section, what is wrong, and what you did. The user pastes that section to the spec session verbatim, so it must stand alone: no "as above", no "see deviation 2". "None" must be stated explicitly.
+- End the report with one line starting "Carry to the spec session:" that names what goes back: the Spec issues section above whenever it has at least one bullet, the blocker in part 3 whenever you are blocked, both when both apply. When neither applies the line is "Nothing to carry to the spec session." Every Spec issues bullet goes back, including defects you already handled; the spec session fixes the spec text so the next reader doesn't hit them. Never filter.
 ```
 
 ## Amendments, after implementation
@@ -140,6 +141,11 @@ Nothing arrives here from the implementer. Corrections come from the user:
 they paste the "Spec issues" section of the implementer's report, they relay a
 question the implementer stopped on, they tried the result, or a requirement
 changed. Each item is an amendment.
+
+The implementer's report ends with a "Carry to the spec session" line naming
+what to paste, and the paste is the whole Spec issues section, unfiltered.
+Items the implementer already handled arrive too, and they still get the spec
+fixed below. Don't ask the user to pre-sort them.
 
 Classify every item from the pasted text and the spec alone. Never open the
 diff to check. If the paste doesn't say what the code currently does, ask the
@@ -192,7 +198,7 @@ Amend the implementation of <repo-relative spec path>: <N> items.
 
 2. ...
 
-If a handoff for this spec is still in progress, finish it against the amended spec and write a single report. First line of your report: "Amended: <spec slug>, <N> items." Same four parts as a handoff.
+If a handoff for this spec is still in progress, finish it against the amended spec and write a single report. First line of your report: "Amended: <spec slug>, <N> items." Same four parts and closing line as a handoff.
 
 <rules block, verbatim>
 ```
