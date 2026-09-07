@@ -127,12 +127,13 @@ Rules:
 - Read the spec in full, then the project's CLAUDE.md, before touching anything. For an amendment, re-read the sections it names even if you remember them.
 - Do not edit the spec.
 - If an ambiguity is load-bearing (two reasonable readings would build incompatible things), stop and ask the user in your own session. Do not guess, and do not message the spec session.
-- Everything else wrong with the spec (a contradiction, a section that doesn't match the code, a missing case with an obvious answer, an Outcome bullet that can't be checked as written): note it, do the obvious thing, keep going. Never fix around a defect silently.
-- Stay inside the spec's scope. Every deviation from the spec must trace to a defect you report; a deviation with no spec defect behind it is scope creep, so revert it.
+- Everything else wrong with the spec: do the obvious thing and keep going. Never fix around a problem silently.
+- Stay inside the spec's scope. Every deviation from the spec must trace to a spec problem you report; a deviation with no spec problem behind it is scope creep, so revert it.
 - Review your own diff before reporting: run /fix-code, fix the real findings, re-run the verify bullets. Code review is your job, not the spec session's.
 - Do not commit unless CLAUDE.md or the user says to.
-- When done, report to the user in your own session, never to the spec session, in four parts: what was built; every deviation and why ("None" must be stated); any Outcome bullet you could not verify and what blocked it; and a section headed exactly "Spec issues" with one bullet per defect you found in the spec, naming the section, what is wrong, and what you did. The user pastes that section to the spec session verbatim, so it must stand alone: no "as above", no "see deviation 2". "None" must be stated explicitly.
-- End the report with one line starting "Carry to the spec session:" that names what goes back: the Spec issues section above whenever it has at least one bullet, the blocker in part 3 whenever you are blocked, both when both apply. When neither applies the line is "Nothing to carry to the spec session." Every Spec issues bullet goes back, including defects you already handled; the spec session fixes the spec text so the next reader doesn't hit them. Never filter.
+- When done, report to the user in your own session, never to the spec session, in four parts: what was built; every deviation and why ("None" must be stated); any Outcome bullet you could not verify and what blocked it; and a section headed exactly "Spec issues".
+- "Spec issues" is for material problems only: the spec blocked you, forced a deviation, made you pick between incompatible readings, contradicted itself or the code, or left an Outcome bullet unverifiable as written. One bullet each, naming the section, what is wrong, and what you did. Leave out wording, naming, typos, structure, style, and any gap you filled the obvious way with no real risk of getting it wrong — if the spec session would read the bullet and change nothing, it does not belong there. A long list is a signal you are reporting noise, not thoroughness. "None" must be stated explicitly, and is the normal outcome for a good spec. The user pastes the section to the spec session verbatim, so it must stand alone: no "as above", no "see deviation 2".
+- End the report with one line starting "Carry to the spec session:" that names what goes back: the Spec issues section above whenever it has at least one bullet, the blocker in part 3 whenever you are blocked, both when both apply. When neither applies the line is "Nothing to carry to the spec session." Once a problem has met the bar it goes back whole, including ones you already handled; the spec session fixes the spec text so the next reader doesn't hit them. Filter on materiality, never on whether it still bothers you.
 ```
 
 ## Amendments, after implementation
@@ -143,9 +144,12 @@ question the implementer stopped on, they tried the result, or a requirement
 changed. Each item is an amendment.
 
 The implementer's report ends with a "Carry to the spec session" line naming
-what to paste, and the paste is the whole Spec issues section, unfiltered.
-Items the implementer already handled arrive too, and they still get the spec
-fixed below. Don't ask the user to pre-sort them.
+what to paste, and the paste is the whole Spec issues section. The
+implementer lists only material problems there — ones that blocked it, forced
+a deviation, or made it guess — so expect few bullets, often none, and treat
+each one as worth a spec fix. Items it already handled arrive too, and they
+still get the spec fixed below. Don't ask the user to pre-sort them, and don't
+ask for the nits it left out.
 
 Classify every item from the pasted text and the spec alone. Never open the
 diff to check. If the paste doesn't say what the code currently does, ask the
