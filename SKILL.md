@@ -151,6 +151,13 @@ each one as worth a spec fix. Items it already handled arrive too, and they
 still get the spec fixed below. Don't ask the user to pre-sort them, and don't
 ask for the nits it left out.
 
+A batch of items is handled in three steps, in order: classify, fix the spec,
+then decide whether the implementer needs a message. The third step ends with
+a verdict the user can see, whichever way it goes. Pasting a report is a
+request to classify, not a yes to send anything.
+
+### 1. Classify
+
 Classify every item from the pasted text and the spec alone. Never open the
 diff to check. If the paste doesn't say what the code currently does, ask the
 user for that part of the report. If the paste is clearly partial or refers to
@@ -164,29 +171,66 @@ decides whether the spec changes:
   reasonably. Fix the spec text in place so it reads true.
 - **Requirement change.** The user wants something different from what was
   signed off. Edit the affected sections and the Outcome bullets in place.
+- **Answer to a question.** A relayed implementer question that it stopped
+  on. The answer goes into the spec if it belongs there; don't answer in chat
+  and leave the spec ambiguous.
 
-For a spec defect or requirement change, also add a dated entry to an
-`## Amendments` section at the end of the spec: one or two lines, what changed
-and why. The body of the spec should always describe what the system is meant
-to be; the Amendments section is the history of how it got there. Never leave
-the spec describing something other than what you are asking the implementer
-to build.
+### 2. Fix the spec
 
-A relayed implementer *question* is handled the same way: the answer goes into
-the spec if it belongs there, and the amendment message carries it. Don't
-answer in chat and leave the spec ambiguous.
+For a spec defect, requirement change, or an answer that changed spec text,
+also add a dated entry to an `## Amendments` section at the end of the spec:
+one or two lines, what changed and why. The body of the spec should always
+describe what the system is meant to be; the Amendments section is the
+history of how it got there. Never leave the spec describing something other
+than what you are asking the implementer to build.
 
 Items where the implementer already did the right thing still get the spec
-fixed, so the next reader doesn't hit the same defect. They need no message
-unless the fix changes what was built.
+fixed, so the next reader doesn't hit the same defect.
 
-If any item needs the implementer to act, compose one message from the
-amendment template covering all of them, print it in full, and ask with
-AskUserQuestion: "Send this amendment to <name> (<busy|idle>)?" with the same
-options and tagging rule as a handoff. Do not suggest a `/clear`: the
-implementer's build context is useful for corrections, and the message is
-self-sufficient if the user cleared anyway. If no item needs the implementer,
-tell the user the spec was fixed and nothing goes out.
+### 3. State whether the implementer needs a message
+
+An item needs the implementer to act when what was built no longer matches
+the spec as it now reads, or when the implementer is waiting. By kind:
+
+- **Implementation bug:** always. Only the implementer changes code.
+- **Spec defect:** only when the fix changes what was built. When the
+  implementer already did the right thing and the spec now describes what it
+  built, the spec edit is the whole resolution and no message is needed.
+- **Requirement change:** always.
+- **Answer to a question:** always. The implementer is stopped on it.
+
+Before composing anything, report the decision to the user: one line per
+item giving its kind, which spec sections changed (or "spec unchanged"), and
+"implementer: needs to act" or "implementer: nothing to do". Then close with
+one verdict line, worded exactly one of these ways:
+
+- `Amendment to the implementer: needed, <N> of <M> items.`
+- `Amendment to the implementer: not needed. The spec is fixed and nothing goes out.`
+
+This line is never skipped and never implied. The user must not have to ask
+"did anything go out?" or "does the implementer need to know?". When the
+verdict is "not needed", stop there.
+
+When the verdict is "needed":
+
+1. Compose one message from the amendment template covering only the items
+   that need the implementer. Items that need nothing stay out of it; the
+   spec fix resolved them.
+2. Run ListAgents and resolve the target exactly as for a handoff: peer
+   sessions only, never this session's subagents. The implementer session
+   may have a different name than it had at handoff, so resolve it fresh.
+3. Print the composed message in full in a code block.
+4. Ask with AskUserQuestion: "Send this amendment to <name> (<busy|idle>)?"
+   Options: "Send to <name>", "Print only, I'll paste it", "Not yet". Same
+   tagging rule and no-peer variant as a handoff. Do not suggest a `/clear`:
+   the implementer's build context is useful for corrections, and the
+   message is self-sufficient if the user cleared anyway.
+5. Send only on an explicit "Send". Fixing the spec is never a reason to
+   send, and neither is the paste itself. On "Not yet", stop; the user will
+   say when.
+
+After sending, move on as after a handoff: don't wait, don't poll, don't ask
+how it went.
 
 ### Amendment template
 
