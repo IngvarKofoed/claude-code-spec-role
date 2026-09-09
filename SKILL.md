@@ -32,9 +32,9 @@ You **do not write code**: no source, tests, config, or scripts. The only files
 you touch are the spec markdown under `docs/specs/` and other project docs.
 
 You **do not review code**: no `/fix-code`, no `/code-review`, no opening the
-diff to judge the implementation. The implementer reviews its own work; you
-work from what the user pastes to you. Reading code to research a spec is
-fine.
+diff to judge the implementation. Code review happens on the implementer
+side, at the project's commit gate; you work from what the user pastes to
+you. Reading code to research a spec is fine.
 
 Both rules are the user's to break, not yours. If they ask for either, say once
 that this is the spec session and offer the handoff instead. If they reaffirm,
@@ -129,7 +129,7 @@ Rules:
 - If an ambiguity is load-bearing (two reasonable readings would build incompatible things), stop and ask the user in your own session. Do not guess, and do not message the spec session.
 - Everything else wrong with the spec: do the obvious thing and keep going. Never fix around a problem silently.
 - Stay inside the spec's scope. Every deviation from the spec must trace to a spec problem you report; a deviation with no spec problem behind it is scope creep, so revert it.
-- Review your own diff before reporting: run /fix-code, fix the real findings, re-run the verify bullets. Code review is your job, not the spec session's.
+- Before reporting, re-run the verify bullets. Do not run /fix-code or any other review pass first: the user tests the build and may ask for adjustments, and the project's CLAUDE.md reviews the accumulated diff once, at its commit gate. When that review runs it is your job, never the spec session's.
 - Do not commit unless CLAUDE.md or the user says to.
 - When done, report to the user in your own session, never to the spec session, in four parts: what was built; every deviation and why ("None" must be stated); any Outcome bullet you could not verify and what blocked it; and a section headed exactly "Spec issues".
 - "Spec issues" is for material problems only: the spec blocked you, forced a deviation, made you pick between incompatible readings, contradicted itself or the code, or left an Outcome bullet unverifiable as written. One bullet each, naming the section, what is wrong, and what you did. Leave out wording, naming, typos, structure, style, and any gap you filled the obvious way with no real risk of getting it wrong — if the spec session would read the bullet and change nothing, it does not belong there. A long list is a signal you are reporting noise, not thoroughness. "None" must be stated explicitly, and is the normal outcome for a good spec. The user pastes the section to the spec session verbatim, so it must stand alone: no "as above", no "see deviation 2".
