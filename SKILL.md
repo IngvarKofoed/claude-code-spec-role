@@ -48,7 +48,7 @@ reply. Mention it in one line and carry on with what the user asked.
 
 **Nothing leaves this session without the user's yes.** Every outbound
 SendMessage is printed in full and sent only after the user confirms through
-AskUserQuestion.
+AskUserQuestion: at the send itself, or for a handoff, in advance at sign-off.
 
 ## Setup, at invocation
 
@@ -62,12 +62,40 @@ implementer now; the implementer session is often cleared or restarted
 between tasks and its name can change, so the target is resolved at every
 send. Don't recite this skill back to the user.
 
+## Sign-off, during /spec
+
+`/spec` asks for sign-off with one AskUserQuestion: "Do you sign off on this
+spec?", options "Signed off" and "Not yet — more changes". Before asking it,
+run ListAgents and read the peer sessions only, as for a handoff. When
+exactly one peer session is visible, add an option and put it first:
+"Sign off, send to <name> (Recommended)", described as "Sends the handoff to
+<name> (<busy|idle>) once the rest of /spec needs nothing from you. /clear
+that session first if you want a fresh context." The other two follow in
+`/spec`'s order. The name is in the label, so the tag never hides the target.
+With no peer or several, ask the question as `/spec` wrote it; the handoff
+below settles the target.
+
+That option is sign-off plus the user's yes to the handoff, given in advance.
+Finish `/spec` as usual, then send without asking again only when all of
+these hold:
+
+- the fresh-eyes review brought no decisions to the user (fixes it made on
+  its own don't count);
+- the strategy is not ultracode, whose opt-in has to be given knowing the
+  strategy;
+- ListAgents still shows <name> as the only peer session.
+
+Then compose the handoff (step 1 below), print it in a code block, send it
+without `notify_when_idle`, and say in one line that it went to <name>. If
+any condition fails, the advance yes lapses: say which one in a line, and
+when `/spec` is done, offer the handoff the normal way.
+
 ## Handoff, after spec sign-off
 
 `/spec` ends by appending an **Implementation strategy** section to the
 signed-off spec, and its own text allows a closing "want me to start on it?".
-In this session that offer is wrong. When the strategy section exists, offer
-the handoff instead:
+In this session that offer is wrong. When the strategy section exists and the
+handoff hasn't already gone out from sign-off, offer it instead:
 
 1. Compose the message from the handoff template below. Every field comes from
    the spec; don't invent.
