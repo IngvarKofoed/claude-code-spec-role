@@ -64,31 +64,57 @@ send. Don't recite this skill back to the user.
 
 ## Sign-off, during /spec
 
-`/spec` asks for sign-off with one AskUserQuestion: "Do you sign off on this
-spec?", options "Signed off" and "Not yet — more changes". Before asking it,
-run ListAgents and read the peer sessions only, as for a handoff. When
-exactly one peer session is visible, add an option and put it first:
-"Sign off, send to <name> (Recommended)", described as "Sends the handoff to
-<name> (<busy|idle>) once the rest of /spec needs nothing from you. /clear
-that session first if you want a fresh context." The other two follow in
-`/spec`'s order. The name is in the label, so the tag never hides the target.
-With no peer or several, ask the question as `/spec` wrote it; the handoff
-below settles the target.
+`/spec` can get sign-off at two points. At both, this session lets the user
+sign off and send the handoff in one click.
 
-That option is sign-off plus the user's yes to the handoff, given in advance.
-Finish `/spec` as usual, then send without asking again only when all of
-these hold:
+**At the draft.** Each time `/spec` hands over the draft with no Open
+Questions, it prints its markup instructions and waits for a reply. Keep the
+instructions, but don't end them with "reply when you're done, or tell me
+you're happy with it". Wait with one AskUserQuestion instead: "The draft is
+at <path>. Sign off on it as it stands, or mark it up first?" Options, in
+this order: "Sign off, send to <name>"; "Sign off", described as "Signs off
+the draft as it stands; the handoff is offered when /spec is done"; and
+"I've marked it up", described as "Add //// lines or edit the file, then
+pick this and I'll take another pass." No (Recommended) tag here, since the
+user may not have read the draft yet. A draft with Open Questions keeps
+`/spec`'s own picker, because the answers can change the spec; sign-off then
+comes at the question below.
+
+**At the sign-off question.** `/spec` phase 6 asks "Do you sign off on this
+spec?", options "Signed off" and "Not yet — more changes". Add "Sign off,
+send to <name> (Recommended)" and put it first; the other two follow in
+`/spec`'s order.
+
+At either point, run ListAgents first and read the peer sessions only, as
+for a handoff. Offer the send option only when exactly one peer session is
+visible, described as "Sends the handoff to <name> (<busy|idle>) once the
+rest of /spec needs nothing from you. /clear that session first if you want
+a fresh context." The name is in the label, so the tag never hides the
+target. With no peer or several, leave it out; the handoff below settles
+the target.
+
+Either sign-off option at the draft is `/spec`'s explicit sign-off, so
+phase 6 doesn't ask again. Re-read the spec from disk first. If it now has
+`////` lines, the user marked it up after all: say so in a line, integrate
+them, and ask the sign-off question. Don't carry an advance yes to send
+over from the draft; the user decides again on the revised spec.
+
+A send option is sign-off plus the user's yes to the handoff, given in
+advance. Finish `/spec` as usual, then send without asking again only when
+all of these hold:
 
 - the fresh-eyes review brought no decisions to the user (fixes it made on
   its own don't count);
-- the strategy is not ultracode, whose opt-in has to be given knowing the
-  strategy;
 - ListAgents still shows <name> as the only peer session.
 
 Then compose the handoff (step 1 below), print it in a code block, send it
-without `notify_when_idle`, and say in one line that it went to <name>. If
-any condition fails, the advance yes lapses: say which one in a line, and
-when `/spec` is done, offer the handoff the normal way.
+without `notify_when_idle`, and say in one line that it went to <name>. The
+advance yes covers the handoff, not ultracode: the strategy didn't exist
+when the user clicked. So an ultracode handoff sent this way leaves the
+approval to the implementer side (see the template), and the one-line note
+says the implementer will ask before launching it. If any condition fails,
+the advance yes lapses: say which one in a line, and when `/spec` is done,
+offer the handoff the normal way.
 
 ## Handoff, after spec sign-off
 
@@ -142,6 +168,9 @@ Acceptance: the spec's Outcome section. Every verify bullet must pass or be repo
 
 When the strategy is ultracode, make the Strategy line read:
 `Strategy: ultracode (<N> agents, <models>) — approved by the user at handoff.`
+When the handoff went out on the advance yes from sign-off, the user hasn't
+approved ultracode, so it reads:
+`Strategy: ultracode (<N> agents, <models>) — not approved yet; ask the user before launching.`
 
 ### Rules block
 
